@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tuxedo Cat Coffee</title>
+    <link type="text/css" rel="stylesheet" href="cafe.css">
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="Tuxedo Cat Coffee"/>
+    </header>
+    <main>
+        <form id="order_form" name="order_form" action="checkout.html" method="get">
+            <section id="menu">
+            	<h2>Menu</h2>
+            	<p>Click an item to add it to your order.</p>
+            	<ul>
+            		<li><a href="#"><img id="images/espresso_info.jpg" src="images/espresso.jpg" alt="espresso"/></a></li>
+            		<li><a href="#"><img id="images/latte_info.jpg" src="images/latte.jpg" alt="latte"/></a></li>
+            		<li><a href="#"><img id="images/cappuccino_info.jpg" src="images/cappuccino.jpg" alt="cappuccino"/></a></li>
+            		<li><a href="#"><img id="images/coffee_info.jpg" src="images/coffee.jpg" alt="coffee"/></a></li>
+            		<li><a href="#"><img id="images/biscotti_info.jpg" src="images/biscotti.jpg" alt="biscotti"/></a></li>
+            		<li><a href="#"><img id="images/scone_info.jpg" src="images/scone.jpg" alt="scone"/></a></li>
+            	</ul>
+            </section>
+
+            <section>
+            	<h2>Your Order</h2>
+            	<section>
+            		<select id="order" name="order" size="6">
+            		</select>
+            		<p id="total"></p>            		
+           		</section>
+            	<section id="buttons">
+           			<input type="button" name="place_order" id="place_order" value="Place Order">
+           			<input type="button" name="clear_order" id="clear_order" value="Clear Order">				            		
+            	</section>
+            </section>
+        </form>
+	</main> 
+	<script>
+		var price = {
+			espresso:1.95,
+			latte:2.95,
+			cappuccino:3.45,
+			coffee:1.75,
+			biscotti:1.95,
+			scone:2.95
+		}
+		var totalPrice = 0;
+		var items = $('#menu li img');
+		items.each(function(){
+			var jDom = $(this);
+			jDom.on('mouseenter',function(){
+				jDom.attr('src', jDom.attr('src').replace('.jpg','_info.jpg'))
+			})
+			jDom.on('mouseleave', function () {
+				jDom.attr('src', jDom.attr('src').replace('_info.jpg', '.jpg'))
+			})
+			jDom.click(function(){
+				var newValue = null;
+				if($('#order').val())
+					newValue = $('#order').val() + '$' + price[jDom.attr('alt')] + '-' + jDom.attr('alt')
+				else
+					newValue = '$' + price[jDom.attr('alt')] + '-' + jDom.attr('alt')
+				totalPrice += price[jDom.attr('alt')]
+				$('#total').text('$' + totalPrice)
+				console.log(newValue)
+				var newNode = document.createElement('option')
+				newNode.innerText = newValue
+				$('#order').append(newNode)
+			})
+		})
+	
+		$('#place_order').click(function(){
+			window.location.href = "./checkout.html";
+		})
+
+		$('#clear_order').click(function(){
+			totalPrice = 0;
+			$('#total').text('');
+			$('#order').html('')
+		})
+	</script>
+</body>
+</html>
